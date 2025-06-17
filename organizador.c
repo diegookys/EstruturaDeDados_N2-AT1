@@ -16,8 +16,8 @@ typedef struct{
 int comparar_leituras(const void* a, const void* b){
     long long ts_a = ((Leitura*)a)->ts;
     long long ts_b = ((Leitura*)b)->ts;
-    if (ts_a < ts_b) return -1;
-    if (ts_a > ts_b) return 1;
+    if (ts_a > ts_b) return -1;
+    if (ts_a < ts_b) return 1;
     return 0;
 }
 
