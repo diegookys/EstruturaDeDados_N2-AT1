@@ -25,24 +25,24 @@ int main(){
     int qtdDeSensores = 0;
     char mais = 's';
 
-    while (mais == 's' && qtdDeSensores < 10) {
+    while(mais == 's' && qtdDeSensores < 10){
         printf("\n---- Sensor #%d ----\n", qtdDeSensores + 1);
         printf("Nome do sensor: ");
 
         scanf("%s", sensoresNome[qtdDeSensores]);
 
-        printf("Tipo (0=int, 1=real, 2=bool, 3=texto): ");
+        printf("Tipo (Digite 0 = CONJ_Z, 1 = CONJ_Q, 2 = BINARIO, 3 = TEXTO): ");
         scanf("%d", &tiposDeSensores[qtdDeSensores]);
         qtdDeSensores++;
 
         if(qtdDeSensores < 10){
-            printf("Adicionar outro? (s/n): ");
+            printf("Adicionar outro sensor? (s/n): ");
             scanf(" %c", &mais);
         }
     }
 
     int total_leituras = qtdDeSensores * 2000;
-    if (total_leituras == 0) return 0;
+    if(total_leituras == 0) return 0;
     
     Leitura* leituras = (Leitura*) malloc(total_leituras * sizeof(Leitura));
     printf("\nGerando %d leituras...\n", total_leituras);
