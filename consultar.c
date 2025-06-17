@@ -43,8 +43,8 @@ int main(){
     int min = 0, max = qtd - 1, idx = 0;
     while(min <= max){
         int meio = min + (max - min) / 2;
-        if(leituras[meio].ts == ts_alvo) { idx = meio; break;}
-        if(leituras[meio].ts < ts_alvo) min = meio + 1;
+        if(leituras[meio].ts == ts_alvo){ idx = meio; break;}
+        if(leituras[meio].ts > ts_alvo) min = meio + 1;
         else max = meio - 1;
     }
 
