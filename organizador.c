@@ -4,14 +4,14 @@
 
 typedef struct{ 
     long long ts; 
-    char valor[20];
+    char valor[21];
 } Leitura;
 
 typedef struct{
     char nome[30];
     Leitura* leituras;
     int qtd;
-} SensorData;
+} Sensor_Data;
 
 int comparar_leituras(const void* a, const void* b){
     long long ts_a = ((Leitura*)a)->ts;
@@ -22,28 +22,32 @@ int comparar_leituras(const void* a, const void* b){
 }
 
 int main(){
-    printf("---- Organizando dados ----\n");
+    printf("\nOrganizando dados...\n");
     FILE* f = fopen("teste.txt", "r");
     if(!f){
-        printf("Erro: 'teste.txt' nao encontrado.\n"); return 1; 
+        printf("\nObs: 'teste.txt' nao encontrado.\n");
+        return 1; 
     }
 
-    SensorData* sensores = NULL;
+    Sensor_Data* sensores = NULL;
     int qtdDeSensores = 0;
-    char linha[100]; 
+    char linha[100];
+    int numero_Linha = 0;
 
     while(fgets(linha, sizeof(linha), f)){
+        numero_Linha++;
         long long ts;
-        char nome_sensor[30];
-        char valor[20];
+        char nome_Sensor[30];
+        char valor[21];
 
-        if(sscanf(linha, "%lld %s %s", &ts, nome_sensor, valor) != 3) continue;
-
-        // Procurar se o sensor existe
+        if(sscanf(linha, "%lld %29s %19s", &ts, nome_Sensor, valor) != 3){
+            fprintf(stderr, "\nAviso: Linha #%d malformada no arquivo 'teste.txt'. Ignorando.\n", numero_Linha);
+            continue;
+        }
 
         int sensorID = -1;
         for(int i = 0; i < qtdDeSensores; i++){
-            if(strcmp(sensores[i].nome, nome_sensor) == 0){
+            if(strcmp(sensores[i].nome, nome_Sensor) == 0){
                 sensorID = i;
                 break;
             }
@@ -51,8 +55,8 @@ int main(){
 
         if(sensorID == -1){
             sensorID = qtdDeSensores++;
-            sensores = (SensorData*) realloc(sensores, qtdDeSensores * sizeof(SensorData));
-            strcpy(sensores[sensorID].nome, nome_sensor);
+            sensores = (Sensor_Data*) realloc(sensores, qtdDeSensores * sizeof(Sensor_Data));
+            strcpy(sensores[sensorID].nome, nome_Sensor);
             sensores[sensorID].leituras = NULL;
             sensores[sensorID].qtd = 0;
         }
@@ -64,12 +68,12 @@ int main(){
     }
     fclose(f);
 
-    printf("Organizando e salvando %d sensor(es)...\n", qtdDeSensores);
+    printf("Salvando %d sensor(es)...\n", qtdDeSensores);
 
     for(int i = 0; i < qtdDeSensores; i++){
         qsort(sensores[i].leituras, sensores[i].qtd, sizeof(Leitura), comparar_leituras);
         
-        char nomeArquivo[55]; 
+        char nomeArquivo[36]; 
         sprintf(nomeArquivo, "%s.txt", sensores[i].nome);
 
         FILE* f_out = fopen(nomeArquivo, "w");
@@ -77,10 +81,10 @@ int main(){
             fprintf(f_out, "%lld %s\n", sensores[i].leituras[j].ts, sensores[i].leituras[j].valor);
         }
         fclose(f_out);
-        free(sensores[i].leituras); // Libera memória após o uso
+        free(sensores[i].leituras);
     }
 
     free(sensores);
-    printf("Arquivo(s) de texto criados com sucesso!\n");
+    printf("\nArquivo(s) de texto criados com sucesso!\n\n");
     return 0;
 }
