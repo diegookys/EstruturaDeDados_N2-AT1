@@ -22,9 +22,9 @@ Use um compilador C como `gcc`
 
 Se não houver nenhum instale ele clicando [`aqui`](https://sourceforge.net/projects/mingw/files/latest/download);
 
-Agora inicie um novo terminal no compilador escolhido ou em um prompt de comando e digite:
+Agora inicie um novo terminal no compilador escolhido ou em um prompt de comando e digite um de cada vez:
 
-```bash
+```gcc
 gcc gerador.c -o output\gerador.exe
 gcc organizador.c -o output\organizador.exe
 gcc consultar.c -o output\consultar.exe
@@ -36,31 +36,45 @@ Navegue para a pasta `output` no seu terminal:
 ```powershell
 cd output
 ```
-## Como Usar
-1. Gere arquivo de teste (gerador.exe)
-```bash (exemplo)
+## Como Usar (Terminal)
+**1.** Gere arquivo de teste
+
+Exemplo de teste abaixo, aonde deve ser digitado primeiramente o `.exe`, o `timestamp inicial`, o `timestamp final`, o `sensor` e por fim o `tipo` dele, se quiser pode adicionar até 15 sensores usando `sensor` e `tipo` seguidamente.
+
+Obs: Devem ser seguidos os tipos pré definidos, como;
+
+- CONJ_Z:  para dados tipo inteiro
+- CONJ_Q: para dados do tipo float
+- TEXTO para dados do tipo string
+- BINARIO: para dados do tipo booleano.
+```powershell
 .\gerador.exe 1718755200 1718758800 temperatura CONJ_Z umidade CONJ_Q
 ```
 Informe:
 
-- Timestamp de início e fim (formato Unix Epoch).
-- Nome e tipo de cada sensor (int, real, bool, texto).
+- Timestamp inicial e final.
+- Nome e tipo de cada sensor (CONJ_Z, CONJ_Q, TEXTO ou BINARIO).
 - Serão geradas 2000 leituras aleatórias por sensor no arquivo teste.txt.
 
-2. Organizar dados (organizador.exe)
-```bash
-./organizador
+**2.** Organizar dados
+```powershell
+./organizador.exe
 ```
 - Lê o arquivo teste.txt.
 - Separa as leituras por sensor.
 - Ordena cada arquivo por timestamp e salva como <sensor>.txt.
 
 3. Consultar por timestamp (consultar.exe)
-```bash
-./consultar
+```powershell
+./consultar.exe
 ```
 - Informe o nome do sensor e o timestamp desejado.
 - O programa busca e exibe a leitura mais próxima, usando busca binária no arquivo <sensor>.txt.
+- O seguinte valor de exemplo deve ser impresso;
+```powershell
+Timestamp: 1718758735
+Valor: 41.74
+```
 
 ## Técnicas Utilizadas
 - Alocação dinâmica de memória (malloc, realloc)
